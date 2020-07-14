@@ -5,10 +5,10 @@ require_once __DIR__ . '/users.php';
 
 $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
 
-foreach ($users as $user) {
+/*foreach ($users as $user) {
     deleteUsers($db, $user['username'], $user['password']);
-}
+}*/
 
 foreach ($users as $user) {
-    addUser($db, $user['username'], $user['password']);
+    addUser($db, $user['firstName'] ,$user['lastName'] ,$user['emailAdress'],$user['username'], $user['password']);
 }
