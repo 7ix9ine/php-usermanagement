@@ -1,9 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<form style="margin-left:800px; color:#000000" method="post">
+    Username: <input type="text" name="username"><br>
+    <p></p>
+    Password: <input type="password" name="password"><br>
+    <p></p>
+    <input type="submit" name="submit_button">
+</form>
+
 <?php
 
 require_once __DIR__ . '/users.php';
 require_once __DIR__ . '/functions.php';
 
 $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
+
+if (isset($_POST["submit_button"])) {
+
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    $stmt = $db->prepare("SELECT * FROM user WHERE username = ?");
+    $stmt->execute(array($username));
+    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+    $passwordDb = $user['password'];
+
+    $test = password_verify($password, $passwordDb);
+
+
+    if (databaseLogin($db, $username, $passwordDb)) {
+        header("Location: /userManagement.php");
+    } else {
+        echo("Login unsuccessful! \n");
+    }
+
+}
 
 /*// Read username from CLI (if not given as script argument)
 echo("Enter you username:");
@@ -41,23 +73,28 @@ if(testLogin($users, $username, $password)){
     }
 }*/
 
-$maxTries = 3;
+//$maxTries = 3;
+//
+//for ($count = 0; $count < $maxTries; $count++) {
+//    /*    // Read username from CLI (if not given as script argument)
+//        echo("Enter your username:");
+//        $username = trim(fgets(STDIN), "\n");
+//
+//        // Read password from CLI
+//        echo("Enter your password:");
+//        $password = trim(fgets(STDIN), "\n");*/
+//
+//    //Check if username is in database. If yes, echo Login successful and break loop if not retry and print tries left
+//    if (databaseLogin($db, $username, $password)) {
+//        echo("Login successful!");
+//        break;
+//    } else {
+//        echo("Login unsuccessful! \n");
+//        echo("Tries left: " . ($maxTries - ($count + 1)) . "\n");
+//    }
+//}
+?>
 
-for ($count = 0; $count < $maxTries; $count++) {
-    // Read username from CLI (if not given as script argument)
-    echo("Enter your username:");
-    $username = trim(fgets(STDIN), "\n");
 
-    // Read password from CLI
-    echo("Enter your password:");
-    $password = trim(fgets(STDIN), "\n");
-
-    //Check if username is in database. If yes, echo Login successful and break loop if not retry and print tries left
-    if (databaseLogin($db, $username, $password)) {
-        echo("Login successful!");
-        break;
-    } else {
-        echo("Login unsuccessful! \n");
-        echo("Tries left: " . ($maxTries - ($count + 1)) . "\n");
-    }
-}
+</body>
+</html>
