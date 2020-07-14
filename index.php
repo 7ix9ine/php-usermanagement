@@ -2,8 +2,8 @@
 <html>
 <body>
 
-<h1>Poggers</h1>
-<p>kappakappakappakappa</p>
-
+<form style="margin-left:1740px" action="login.php" method="post">
+    <input type="submit" value="Login"/>
+</form>
 </body>
 </html> 
