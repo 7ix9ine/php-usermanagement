@@ -68,7 +68,7 @@ function databaseLogin(PDO $db, $username, $password)
 function addUser(PDO $db, $username, $password)
 {
     $stmt = $db->prepare('INSERT INTO user (username, password) VALUES (?, ?)');
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);;
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $stmt->execute(array($username, $hashedPassword));
 
     var_dump($hashedPassword);
@@ -78,7 +78,6 @@ function deleteUsers(PDO $db, $username, $password){
     $stmt = $db->prepare('DELETE FROM user');
     $stmt->execute(array($username, $password));
 }
-
 
 function passwordHasher($password)
 {
