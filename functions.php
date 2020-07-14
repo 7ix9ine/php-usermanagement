@@ -65,21 +65,35 @@ function databaseLogin(PDO $db, $username, $password)
     }
 }
 
-function addUser(PDO $db, $username, $password)
+function addUser(PDO $db, $firstName, $lastName, $emailAdress, $username, $password)
 {
-    $stmt = $db->prepare('INSERT INTO user (username, password) VALUES (?, ?)');
+    $stmt = $db->prepare(
+        'INSERT INTO user (First_name, Last_name, eMail_adress, username, password) VALUES (?, ?, ?, ?, ?)'
+    );
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt->execute(array($username, $hashedPassword));
+    $stmt->execute(array($firstName, $lastName, $emailAdress, $username, $hashedPassword));
 
     var_dump($hashedPassword);
 }
 
-function deleteUsers(PDO $db, $username, $password){
-    $stmt = $db->prepare('DELETE FROM user');
-    $stmt->execute(array($username, $password));
+function deleteUsers(PDO $db, $username)
+{
+    $stmt = $db->prepare('DELETE FROM user WHERE username = ?');
+    $stmt->execute(array($username));
 }
 
 function passwordHasher($password)
 {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 }
+
+function array_to_table($a)
+{
+    $t = '<table>';
+    $t .= '<tr><th>' . implode('</th><th>', array_keys($a[0])) . '</th></tr>';
+    foreach ($a as $row) {
+        $t .= '<tr><td>' . implode('</td><td>', $row) . '</td></tr>';
+    }
+    return $t .= '</table>';
+}
+
