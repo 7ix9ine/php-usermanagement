@@ -9,9 +9,11 @@ session_start(); ?>
     <div style="text-align: right"><input type="submit" value="Login"/></div>
 </form>
 
+<div style="text-align: center">
 <iframe src="https://giphy.com/embed/10ECejNtM1GyRy" width="453" height="480" frameBorder="0" class="giphy-embed"
         allowFullScreen></iframe>
 <p><a href="https://giphy.com/gifs/dog-angry-doge-10ECejNtM1GyRy">via GIPHY</a></p>
+</div>
 
 </body>
 </html> 
