@@ -10,5 +10,5 @@ $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
 }*/
 
 foreach ($users as $user) {
-    addUser($db, $user['firstName'] ,$user['lastName'] ,$user['emailAdress'],$user['username'], $user['password']);
+    addUser($db, $user['firstName'] ,$user['lastName'] ,$user['emailAddress'],$user['username'], $user['password']);
 }

@@ -65,21 +65,27 @@ function databaseLogin(PDO $db, $username, $password)
     }
 }
 
-function addUser(PDO $db, $firstName, $lastName, $emailAdress, $username, $password)
+function editUser(PDO $db, $id, $first_name, $last_name, $email_address, $username)
+{
+    $stmt = $db->prepare(
+        'UPDATE user SET first_name = ?, last_name = ?, email_address = ?, username = ? WHERE id = ?'
+    );
+    $stmt->execute(array($first_name, $last_name, $email_address, $username, $id));
+}
+
+function addUser(PDO $db, $firstName, $lastName, $emailAddress, $username, $password)
 {
     $stmt = $db->prepare(
         'INSERT INTO user (First_name, Last_name, eMail_adress, username, password) VALUES (?, ?, ?, ?, ?)'
     );
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt->execute(array($firstName, $lastName, $emailAdress, $username, $hashedPassword));
-
-    var_dump($hashedPassword);
+    $stmt->execute(array($firstName, $lastName, $emailAddress, $username, $hashedPassword));
 }
 
-function deleteUsers(PDO $db, $username)
+function deleteUsers(PDO $db, $id)
 {
-    $stmt = $db->prepare('DELETE FROM user WHERE username = ?');
-    $stmt->execute(array($username));
+    $stmt = $db->prepare('DELETE FROM user WHERE id = ?');
+    $stmt->execute(array($id));
 }
 
 function passwordHasher($password)

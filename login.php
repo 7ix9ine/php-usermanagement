@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<form style="margin-left:800px; color:#000000" method="post">
+<?php
+session_start(); ?>
+
+<form style="margin-left:800px;" method="post">
     Username: <input type="text" name="username"><br>
     <p></p>
     Password: <input type="password" name="password"><br>
@@ -17,7 +20,6 @@ require_once __DIR__ . '/functions.php';
 $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
 
 if (isset($_POST["submit_button"])) {
-
     $username = $_POST["username"];
     $password = $_POST["password"];
 
@@ -30,11 +32,11 @@ if (isset($_POST["submit_button"])) {
 
 
     if (databaseLogin($db, $username, $passwordDb)) {
+        $_SESSION['username'] = $username;
         header("Location: /userManagement.php");
     } else {
         echo("Login unsuccessful! \n");
     }
-
 }
 
 /*// Read username from CLI (if not given as script argument)

@@ -1,14 +1,30 @@
-<?php
+<DOCTYPE html>
+    <html>
 
-require_once __DIR__ . '/functions.php';
+    <?php
 
-$db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
+    session_start();
 
-$query = $db->query("DELETE FROM user WHERE id = ?");
-$user = $query->fetch(\PDO::FETCH_ASSOC);
+    if (!isset($_SESSION['username'])) {
+        header("Location: login.php");
+        die();
+    }
 
-$id = $_GET['id'];
 
-var_dump($id);
+    require_once __DIR__ . '/functions.php';
 
-//get id and put it in delete user function to delete specific user with that id
+    $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
+
+    $id = $_GET['id'];
+
+    deleteUsers($db, $id);
+
+    echo "Deleted user with Id: " . $id;
+    ?>
+
+
+    <form action="userManagement.php" method="post">
+        <div style="text-align: left"><input name="back_button" type="submit" value="Go Back"/></div>
+    </form>
+
+    </html>
