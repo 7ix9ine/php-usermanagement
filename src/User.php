@@ -94,10 +94,9 @@ class User
     {
         $user = new static();
 
-        // TODO: Select user with the given id and call the setters
-        $stmt = $database->prepare("SELECT * FROM user WHERE id = ?");
-        $stmt->execute(array($id));
-        $users = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $stmt = $database->query("SELECT * FROM user WHERE id = $id");
+        $users = $stmt->fetch(FETCH_ASSOC);
         $user->setFirstName($users['first_name']);
         $user->setLastName($users['last_name']);
         $user->setUsername($users['username']);
@@ -113,6 +112,13 @@ class User
         $user = new static();
 
         // TODO: Select user with the given username and call the setters
+        $stmt = $database->query("SELECT * FROM user WHERE username = $username");
+        $users = $stmt->fetch(FETCH_ASSOC);
+        $user->setFirstName($users['first_name']);
+        $user->setLastName($users['last_name']);
+        $user->setUsername($users['username']);
+        $user->setEmailAddress($users['email_address']);
+        $user->setPassword($users['password']);
 
         return $user;
     }
@@ -123,8 +129,6 @@ class User
         // TODO: Delete the user from the database and check whether the operation succeeded
         // TODO: Unset the ID
 
-        $stmt = $db->prepare('DELETE FROM user WHERE id = ?');
-        $stmt->execute(array($id));
     }
 
     public function save(PDO $database)
