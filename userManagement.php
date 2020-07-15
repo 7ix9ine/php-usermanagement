@@ -47,7 +47,7 @@ if (!isset($_SESSION['username'])) {
 
 <?php
 
-require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/src/functions.php';
 
 $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
 

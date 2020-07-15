@@ -1,47 +1,5 @@
 <?php
 
-/**
- * Get the age from the specified user
- *
- * The next lines explain what the function does in detail.
- *
- * @param array $users
- * @param string $usnername
- *
- *
- *
- * return int|null
- */
-function getAge($users, $username)
-{
-    foreach ($users as $user) {
-        if ($user['username'] === $username) {
-            return $user['age'];
-        }
-    }
-
-    return null;
-}
-
-function echoSomething($someThing)
-{
-    echo $someThing . PHP_EOL;
-}
-
-function testLogin($users, $username, $password)
-{
-    foreach ($users as $user) {
-        if (
-            $user['username'] === $username
-            && $user['password'] === $password
-        ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
 /**Checks if Username and Password are in the Database
  *
  * Takes the given Values(Username and Password) from the user and checks if they are in the Username Database.
@@ -76,7 +34,7 @@ function editUser(PDO $db, $id, $first_name, $last_name, $email_address, $userna
 function addUser(PDO $db, $firstName, $lastName, $emailAddress, $username, $password)
 {
     $stmt = $db->prepare(
-        'INSERT INTO user (First_name, Last_name, eMail_adress, username, password) VALUES (?, ?, ?, ?, ?)'
+        'INSERT INTO user (first_name, last_name, email_address, username, password) VALUES (?, ?, ?, ?, ?)'
     );
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $stmt->execute(array($firstName, $lastName, $emailAddress, $username, $hashedPassword));
@@ -93,13 +51,14 @@ function passwordHasher($password)
     $hash = password_hash($password, PASSWORD_DEFAULT);
 }
 
-function array_to_table($a)
-{
-    $t = '<table>';
-    $t .= '<tr><th>' . implode('</th><th>', array_keys($a[0])) . '</th></tr>';
-    foreach ($a as $row) {
-        $t .= '<tr><td>' . implode('</td><td>', $row) . '</td></tr>';
-    }
-    return $t .= '</table>';
+function databaseConnect(){
+    $ini = parse_ini_file('etc/config.ini');
+    $host = $ini['host'];
+    $dbname = $ini['database'];
+    $user = $ini['user'];
+    $password = $ini['password'];
+    var_dump($host);
+    var_dump($user);
+    var_dump($password);
+    return new PDO("mysql:host=" .$host. "; dbname=$dbname", $user, $password);
 }
-
