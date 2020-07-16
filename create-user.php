@@ -10,6 +10,8 @@
         die();
     }
 
+    $user = new User();
+
     ?>
 
     <form style="margin-left:800px;" method="post">
@@ -31,7 +33,7 @@
 
     require_once __DIR__ . '/src/functions.php';
 
-    $db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
+    $db = databaseConnect();
 
     if (
         isset($_POST['first_name'])
@@ -41,15 +43,15 @@
         && isset($_POST['password'])
         && isset($_POST['submit_button'])
     ) {
-        addUser(
-            $db,
-            $_POST['first_name'],
-            $_POST['last_name'],
-            $_POST['email_address'],
-            $_POST['username'],
-            $_POST['password']
+        $user->setFirstName($_POST['first_name']);
+        $user->setFirstName($_POST['last_name']);
+        $user->setFirstName($_POST['email_address']);
+        $user->setFirstName($_POST['username']);
+        $user->setFirstName($_POST['password']);
+        $user->save(
+            $db
         );
-        header("Location: /userManagement.php");
+        header("Location: /user-management.php");
     }
 
 

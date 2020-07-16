@@ -10,13 +10,13 @@ require_once __DIR__ . '/src/functions.php';
 
 $db = databaseConnect();
 
-var_dump($db);
-$user = User::findById($db, 50);
 
-$user1 = User::findByUsername($db, "jdoe");
+$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+$path = parse_url($url, PHP_URL_PATH);
+$query = parse_url($url, PHP_URL_QUERY);
+var_dump($path . $query);
 
-var_dump($user1->getUsername());
-var_dump($user->getFirstName());
+
 ?>
 
 <form action="login.php" method="post">

@@ -8,7 +8,7 @@
  * When both are correct the user successfully logs in.
  *
  */
-function databaseLogin(PDO $db, $username, $password)
+/*function databaseLogin(PDO $db, $username, $password)
 {
     $stmt = $db->prepare("SELECT * FROM user WHERE username = ?");
     $stmt->execute(array($username));
@@ -44,12 +44,7 @@ function deleteUsers(PDO $db, $id)
 {
     $stmt = $db->prepare('DELETE FROM user WHERE id = ?');
     $stmt->execute(array($id));
-}
-
-function passwordHasher($password)
-{
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-}
+}*/
 
 function databaseConnect(){
     $ini = parse_ini_file('etc/config.ini');
@@ -57,8 +52,5 @@ function databaseConnect(){
     $dbname = $ini['database'];
     $user = $ini['user'];
     $password = $ini['password'];
-    var_dump($host);
-    var_dump($user);
-    var_dump($password);
     return new PDO("mysql:host=" .$host. "; dbname=$dbname", $user, $password);
 }

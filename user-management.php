@@ -49,7 +49,7 @@ if (!isset($_SESSION['username'])) {
 
 require_once __DIR__ . '/src/functions.php';
 
-$db = new PDO('mysql:host=localhost;dbname=app', 'app', 'app');
+$db = databaseConnect();
 
 $query = $db->query("SELECT * FROM user");
 $user = $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -60,9 +60,9 @@ $user = $query->fetchAll(\PDO::FETCH_ASSOC);
     <?php
     foreach ($user as $users): ?>
         <li>
-            <a href="deleteUser.php?id=<?php
+            <a href="delete-user.php?id=<?php
             echo $users['id']; ?>">Delete this user</a>
-            <a href="editUser.php?id=<?php
+            <a href="edit-user.php?id=<?php
             echo $users['id']; ?>">Edit this user</a><?php
             echo "  id: " . $users['id'], " ", $users['first_name'], " ", $users['last_name'], " ", $users['username'], " ", $users['email_address'] ?>
         </li>
@@ -71,7 +71,7 @@ $user = $query->fetchAll(\PDO::FETCH_ASSOC);
 
 </div>
 
-<form action="createUser.php" method="post">
+<form action="create-user.php" method="post">
     <input type="submit" name="submit_button" value="Create/Add Account">
 </form>
 

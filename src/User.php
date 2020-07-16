@@ -4,11 +4,29 @@ class User
 {
 
     /** @var string */
+    protected $id;
     protected $firstName;
     protected $lastName;
     protected $username;
     protected $emailAddress;
     protected $password;
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 
     /**
      * @return string
@@ -27,7 +45,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLastName()
     {
@@ -35,7 +53,7 @@ class User
     }
 
     /**
-     * @param mixed $lastName
+     * @param string $lastName
      */
     public function setLastName($lastName)
     {
@@ -43,7 +61,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -51,7 +69,7 @@ class User
     }
 
     /**
-     * @param mixed $username
+     * @param string $username
      */
     public function setUsername($username)
     {
@@ -59,7 +77,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmailAddress()
     {
@@ -67,7 +85,7 @@ class User
     }
 
     /**
-     * @param mixed $emailAddress
+     * @param string $emailAddress
      */
     public function setEmailAddress($emailAddress)
     {
@@ -75,7 +93,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -83,7 +101,7 @@ class User
     }
 
     /**
-     * @param mixed $password
+     * @param string $password
      */
     public function setPassword($password)
     {
@@ -95,45 +113,85 @@ class User
         $user = new static();
 
 
-        $stmt = $database->query("SELECT * FROM user WHERE id = $id");
-        $users = $stmt->fetch(FETCH_ASSOC);
-        $user->setFirstName($users['first_name']);
-        $user->setLastName($users['last_name']);
-        $user->setUsername($users['username']);
-        $user->setEmailAddress($users['email_address']);
-        $user->setPassword($users['password']);
+        $stmt = $database->prepare("SELECT * FROM user WHERE id = ?");
+        $stmt->execute(array($id));
+        $users = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($users !== false) {
+            $user->setFirstName($users['first_name']);
+            $user->setLastName($users['last_name']);
+            $user->setUsername($users['username']);
+            $user->setEmailAddress($users['email_address']);
+            $user->setPassword($users['password']);
+            $user->setId($users['id']);
 
-
-        return $user;
+            return $user;
+        }
+        return null;
     }
 
     public static function findByUsername(PDO $database, $username)
     {
         $user = new static();
 
-        // TODO: Select user with the given username and call the setters
-        $stmt = $database->query("SELECT * FROM user WHERE username = $username");
-        $users = $stmt->fetch(FETCH_ASSOC);
-        $user->setFirstName($users['first_name']);
-        $user->setLastName($users['last_name']);
-        $user->setUsername($users['username']);
-        $user->setEmailAddress($users['email_address']);
-        $user->setPassword($users['password']);
+        $stmt = $database->prepare("SELECT * FROM user WHERE username = ?");
+        $stmt->execute(array($username));
+        $users = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($users !== false) {
+            $user->setFirstName($users['first_name']);
+            $user->setLastName($users['last_name']);
+            $user->setUsername($users['username']);
+            $user->setEmailAddress($users['email_address']);
+            $user->setPassword($users['password']);
 
-        return $user;
+            return $user;
+        }
+        return null;
     }
 
-    public function delete(PDO $db)
+    public function delete(PDO $database)
     {
-        // TODO: Check whether ID isset
-        // TODO: Delete the user from the database and check whether the operation succeeded
-        // TODO: Unset the ID
+        if ($this->getId() !== null) {
+            $stmt = $database->prepare("DELETE FROM user WHERE id = ?");
+            $stmt->execute(array($this->getId()));
+            if (self::findById($database, $this->getId()) === null) {
+                $this->setId(null);
+            } else {
+                echo "That didn't go as planned";
+            }
+        }
+    }
 
+    public function passwordHasher($password)
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     public function save(PDO $database)
     {
-        // TODO: If id isset then execute an UPDATE
-        // If not, execute an INSERT
+        if ($this->getId() !== null) {
+            $statement = $database->prepare(
+                "UPDATE user SET username = ?, first_name = ?, last_name =?, email_address = ? where id =?"
+            );
+            $statement->execute(
+                array(
+                    $this->getUsername(),
+                    $this->getVorname(),
+                    $this->getNachname(),
+                    $this->getEMail(),
+                    $this->getId()
+                )
+            );
+        } else {
+            $statement = $database->prepare(
+                "insert into user (username, first_name, last_name, email_address, password) values(?, ?, ?, ?, ?)"
+            );
+            $hashPassword = $this->passwordHasher($this->getPassword());
+            $statement->execute(
+                array($this->getUsername(), $this->getFirstName(), $this->getLastName(), $this->getEmailAddress(), $hashPassword)
+            );
+            $this->setId($database->lastInsertId("username"));
+        }
     }
+
+
 }
