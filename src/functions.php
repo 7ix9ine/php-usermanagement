@@ -47,7 +47,7 @@ function deleteUsers(PDO $db, $id)
 }*/
 
 function databaseConnect(){
-    $ini = parse_ini_file('../etc/config.ini');
+    $ini = parse_ini_file('/home/netways/workspace/user-management/etc/config.ini');
     $host = $ini['host'];
     $dbname = $ini['database'];
     $user = $ini['user'];
