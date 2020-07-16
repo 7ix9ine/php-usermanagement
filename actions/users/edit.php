@@ -12,10 +12,7 @@
         die();
     }
 
-    $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-    $path = parse_url($url, PHP_URL_PATH);
-    $query = parse_url($url, PHP_URL_QUERY);
-    var_dump($path . $query);
+
 
     $db = databaseConnect();
 

@@ -14,8 +14,8 @@ session_start(); ?>
 
 <?php
 
-require_once __DIR__ . '/src/functions.php';
-require_once __DIR__ . '/src/User.php';
+require_once __DIR__ . '/../src/functions.php';
+require_once __DIR__ . '/../src/User.php';
 
 $db = databaseConnect();
 
@@ -27,7 +27,7 @@ if (isset($_POST['submit_button'])) {
         var_dump($user);
         if (password_verify($password, $user->getPassword())) {
             $_SESSION['username'] = $name;
-            header("Location: /user-management.php");
+            header("Location: /user-management/actions/user-management.php");
         } else {
             echo "Wrong password or Username";
         }

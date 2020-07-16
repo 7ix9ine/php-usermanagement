@@ -26,7 +26,7 @@
     ?>
 
 
-    <form action="user-management.php" method="post">
+    <form action="../user-management.php" method="post">
         <div style="text-align: left"><input name="back_button" type="submit" value="Go Back"/></div>
     </form>
 

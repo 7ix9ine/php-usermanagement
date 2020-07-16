@@ -8,18 +8,12 @@ session_start();
 require_once __DIR__ . '/src/User.php';
 require_once __DIR__ . '/src/functions.php';
 
+$link = $_SERVER['REQUEST_URI'];
 $db = databaseConnect();
-
-
-$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-$path = parse_url($url, PHP_URL_PATH);
-$query = parse_url($url, PHP_URL_QUERY);
-var_dump($path . $query);
-
 
 ?>
 
-<form action="login.php" method="post">
+<form action="actions/login.php" method="post">
     <div style="text-align: right"><input type="submit" value="Login"/></div>
 </form>
 
